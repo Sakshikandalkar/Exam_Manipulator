@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Language - W3Schools Style</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #a6bec5;
+    }
+
+    header {
+      text-align: center;
+      padding: 30px 10px;
+      background: linear-gradient(120deg, #89f7fe, #719d6b);
+      color: white;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    form {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    .card {
+      padding: 40px 10px;
+      border-radius: 10px;
+      color: white;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Unique language colors */
+    label[for="html"] { background: #cce2e8;color: #000; }      /* HTML orange */
+    label[for="css"] { background: #e9d1e5; color: #000; }       /* CSS blue */
+    label[for="javascript"] { background: #f9f1c1; color: #000; } /* JS yellow */
+    label[for="python"] { background: #bceabd; color: #000;}    /* Python blue */
+    label[for="java"] { background: #f7e0c3;color: #000; }      /* Java orange */
+    label[for="c"] { background: #ecd2bc; color: #000;}         /* C blue */
+    label[for="cpp"] { background: #b1d2f6;color: #000; }       /* C++ light blue */
+    label[for="reactjs"] { background: #bde7f3; color: #000; } /* React light cyan */
+
+    input[type="radio"]:checked + label {
+      outline: 4px solid #333;
+      transform: scale(1.05);
+    }
+
+    button {
+      display: block;
+      width: 200px;
+      margin: 30px auto;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background-color: #ff9800;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #e68900;
+    }
+
+    @media (max-width: 600px) {
+      .card {
+        font-size: 18px;
+        padding: 30px 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Select Your Preferred Language</h1>
+</header>
+
+<form action="/exam" method="get">
+  <!-- Hidden fields from previous page -->
+  <input type="hidden" name="name" id="studentName" value="">
+  <input type="hidden" name="branch" id="studentBranch" value="">
+  <input type="hidden" name="year" id="studentYear" value="">
+
+  <div class="grid">
+    <input type="radio" id="html" name="language" value="HTML" required>
+    <label for="html" class="card">HTML</label>
+
+    <input type="radio" id="css" name="language" value="CSS">
+    <label for="css" class="card">CSS</label>
+
+    <input type="radio" id="javascript" name="language" value="JavaScript">
+    <label for="javascript" class="card">JavaScript</label>
+
+    <input type="radio" id="python" name="language" value="Python">
+    <label for="python" class="card">Python</label>
+
+    <input type="radio" id="java" name="language" value="Java">
+    <label for="java" class="card">Java</label>
+
+    <input type="radio" id="c" name="language" value="C">
+    <label for="c" class="card">C</label>
+
+    <input type="radio" id="cpp" name="language" value="C++">
+    <label for="cpp" class="card">C++</label>
+
+    <input type="radio" id="reactjs" name="language" value="ReactJS">
+    <label for="reactjs" class="card">ReactJS</label>
+  </div>
+
+  <button type="submit">Next</button>
+</form>
+
+<script>
+  function getQueryParam(key) {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(key) || '';
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const name = getQueryParam('name');
+    const branch = getQueryParam('branch');
+    const year = getQueryParam('year');
+
+    if (!name || !branch || !year) {
+      setTimeout(() => { window.location.href = '/page1.html'; }, 700);
+      return;
+    }
+
+    document.getElementById('studentName').value = name;
+    document.getElementById('studentBranch').value = branch;
+    document.getElementById('studentYear').value = year;
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= lang.toUpperCase() %> Exam</title>
+    <style>
+        /*gradient background */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+        }
+
+        /* Main content box */
+        .content {
+            background: rgba(255, 255, 255, 0.93);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 40px auto;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        /*Question box */
+        .question-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        /* 🟩 Submit button */
+        button {
+            padding: 12px 25px;
+            background: #2c7a7b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin: 20px auto 0;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #225e5f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h2><%= lang.toUpperCase() %> Exam</h2>
+
+    <form action="/score" method="POST">
+        <!-- Student Info -->
+        <input type="hidden" name="lang" value="<%= lang %>">
+        <input type="hidden" name="year" value="<%= typeof studentYear !== 'undefined' ? studentYear : '' %>">
+        <input type="hidden" name="name" value="<%= typeof studentName !== 'undefined' ? studentName : '' %>">
+        <input type="hidden" name="branch" value="<%= typeof studentBranch !== 'undefined' ? studentBranch : '' %>">
+
+        <!-- Questions -->
+        <% if (questions.length === 0) { %>
+            <div class="question-box">
+                <p><strong>No questions available for this exam.</strong></p>
+            </div>
+        <% } else { %>
+            <% questions.forEach((q, index) => { %>
+                <fieldset class="question-box">
+                    <legend>
+                        <strong>Q<%= index+1 %>:</strong>
+                        <span class="question-text"><%= q.question %></span>
+                    </legend>
+
+                    <!-- hidden ID -->
+                    <input type="hidden" name="qIds[]" value="<%= (q._id && q._id.toHexString) ? q._id.toHexString() : (q._id ? q._id.toString() : 'q' + index) %>">
+
+                    <div class="options" role="radiogroup" aria-labelledby="q<%= index+1 %>-label">
+                        <% q.options.forEach(function(opt) { %>
+                            <label>
+                                <input 
+                                    type="radio" 
+                                    name="<%= (q._id && q._id.toHexString) ? q._id.toHexString() : (q._id ? q._id.toString() : 'q' + index) %>" 
+                                    value="<%= opt %>" 
+                                    required
+                                > 
+                                <%= opt %>
+                            </label>
+                        <% }); %>
+                    </div>
+                </fieldset>
+            <% }) %>
+        <% } %>
+
+        <button type="submit" id="submitBtn">Submit Exam</button>
+    </form>
+</div>
+
+</body>
+</html>

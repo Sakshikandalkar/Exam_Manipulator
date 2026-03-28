@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Programming Quiz</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: linear-gradient(120deg, #89f7fe, #719d6b);
+            background-size: 200% 200%;
+            animation: gradientShift 8s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            animation: float 10s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+            width: 70%;
+            margin: 50px auto;
+            backdrop-filter: blur(12px);
+            color: white;
+        }
+        .question { margin-bottom: 15px; }
+        label { display: block; margin: 5px 0; cursor: pointer; }
+        input[type="radio"] { margin-right: 8px; }
+        button {
+            background-color: #df63b9;
+            border: none;
+            color: black;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background-color: #ffb300; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+<div class="bubble" style="width: 80px; height: 80px; left: 20%; animation-delay: 0s;"></div>
+<div class="bubble" style="width: 50px; height: 50px; left: 70%; animation-delay: 2s;"></div>
+<div class="bubble" style="width: 100px; height: 100px; left: 40%; animation-delay: 4s;"></div>
+<div class="bubble" style="width: 60px; height: 60px; left: 80%; animation-delay: 1s;"></div>
+<div class="bubble" style="width: 40px; height: 40px; left: 10%; animation-delay: 3s;"></div>
+
+<div class="container">
+    <h2 id="quizTitle">Programming Quiz</h2>
+    <form id="quizForm">
+        <div id="quizContainer"></div>
+        <button type="submit">Submit Quiz</button>
+    </form>
+</div>
+
+<script>
+async function loadQuiz(subject) {
+    const res = await fetch(`/exam/${subject}`);
+    const questions = await res.json();
+
+    const quizDiv = document.getElementById("quizContainer");
+    quizDiv.innerHTML = "";
+
+    questions.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.classList.add("question");
+        div.innerHTML = `<strong>Q${i + 1}: ${q.question}</strong>`;
+
+        q.options.forEach(opt => {
+            div.innerHTML += `
+                <label>
+                    <input type="radio" name="q${i}" value="${opt}"> ${opt}
+                </label>
+            `;
+        });
+
+        quizDiv.appendChild(div);
+    });
+}
+
+// Get subject from URL ?language=Java
+const params = new URLSearchParams(window.location.search);
+const subject = params.get("language");
+document.getElementById("quizTitle").innerText = `${subject} Quiz`;
+
+if (subject) {
+    loadQuiz(subject);
+} else {
+    document.getElementById("quizContainer").innerHTML = "<p>Please select a language first.</p>";
+}
+
+document.getElementById("quizForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    alert("Quiz submitted!");
+});
+</script>
+
+</body>
+</html>
